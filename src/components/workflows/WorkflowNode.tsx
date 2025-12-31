@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import { Handle, Position } from 'reactflow'
+import { Handle, Position, NodeProps } from 'reactflow'
 import {
   Box,
   VStack,
@@ -17,7 +17,26 @@ import { motion } from 'framer-motion'
 
 const MotionBox = motion(Box)
 
-const WorkflowNode = ({ data, id, isConnectable, onNodeAction, selected }) => {
+interface WorkflowNodeData {
+  label: string
+  type: string
+  status?: string
+  progress?: number
+  parameters?: Record<string, any>
+  duration?: string
+}
+
+interface WorkflowNodeProps extends NodeProps<WorkflowNodeData> {
+  onNodeAction?: (action: string, nodeId: string) => void
+}
+
+const WorkflowNode = ({ 
+  data, 
+  id, 
+  isConnectable = true, 
+  selected = false,
+  onNodeAction
+}: WorkflowNodeProps) => {
   const bgColor = useColorModeValue('white', 'gray.800')
   const borderColor = useColorModeValue('gray.200', 'gray.600')
   const shadowColor = useColorModeValue('rgba(0, 0, 0, 0.1)', 'rgba(0, 0, 0, 0.4)')
@@ -56,7 +75,7 @@ const WorkflowNode = ({ data, id, isConnectable, onNodeAction, selected }) => {
     }
   }
 
-  const statusConfig = getStatusConfig(data.status)
+  const statusConfig = getStatusConfig(data.status || 'idle')
 
   const getBadgeColor = (status) => {
     switch (status) {
@@ -125,7 +144,7 @@ const WorkflowNode = ({ data, id, isConnectable, onNodeAction, selected }) => {
             </Text>
           </HStack>
           <Badge
-            colorScheme={getBadgeColor(data.status)}
+            colorScheme={getBadgeColor(data.status || 'idle')}
             variant="subtle"
             px={2}
             py={1}
@@ -141,7 +160,7 @@ const WorkflowNode = ({ data, id, isConnectable, onNodeAction, selected }) => {
         </Text>
 
         {/* 진행률 */}
-        {data.status !== 'idle' && (
+        {data.status && data.status !== 'idle' && (
           <Box>
             <Progress
               value={data.progress || 0}
@@ -194,7 +213,7 @@ const WorkflowNode = ({ data, id, isConnectable, onNodeAction, selected }) => {
               icon={<FiPause />}
               size="xs"
               colorScheme="yellow"
-              onClick={() => onNodeAction('stop', id)}
+              onClick={() => onNodeAction?.('stop', id)}
             />
           </Tooltip>
         ) : data.status !== 'completed' && (
@@ -204,7 +223,7 @@ const WorkflowNode = ({ data, id, isConnectable, onNodeAction, selected }) => {
               icon={<FiPlay />}
               size="xs"
               colorScheme="green"
-              onClick={() => onNodeAction('run', id)}
+              onClick={() => onNodeAction?.('run', id)}
             />
           </Tooltip>
         )}
@@ -217,7 +236,7 @@ const WorkflowNode = ({ data, id, isConnectable, onNodeAction, selected }) => {
               size="xs"
               colorScheme="red"
               variant="ghost"
-              onClick={() => onNodeAction('delete', id)}
+              onClick={() => onNodeAction?.('delete', id)}
             />
           </Tooltip>
         )}

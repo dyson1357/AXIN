@@ -26,19 +26,15 @@ import {
   Card,
   CardBody,
   useColorModeValue,
-  IconButton,
-  Tooltip,
   Menu,
   MenuButton,
   MenuList,
   MenuItem,
+  IconButton,
 } from '@chakra-ui/react'
 import { 
   FiPlay, 
   FiSave, 
-  FiZoomIn, 
-  FiZoomOut,
-  FiMaximize2,
   FiMoreVertical,
   FiDownload,
   FiUpload,
@@ -205,35 +201,7 @@ export default function WorkflowsPage() {
                     attributionPosition="bottom-right"
                   >
                     <Background />
-                    <Controls>
-                      <Tooltip label="확대" placement="right">
-                        <IconButton
-                          aria-label="Zoom In"
-                          icon={<Icon as={FiZoomIn} />}
-                          size="sm"
-                          variant="ghost"
-                          onClick={() => {}}
-                        />
-                      </Tooltip>
-                      <Tooltip label="축소" placement="right">
-                        <IconButton
-                          aria-label="Zoom Out"
-                          icon={<Icon as={FiZoomOut} />}
-                          size="sm"
-                          variant="ghost"
-                          onClick={() => {}}
-                        />
-                      </Tooltip>
-                      <Tooltip label="화면 맞춤" placement="right">
-                        <IconButton
-                          aria-label="Fit View"
-                          icon={<Icon as={FiMaximize2} />}
-                          size="sm"
-                          variant="ghost"
-                          onClick={() => {}}
-                        />
-                      </Tooltip>
-                    </Controls>
+                    <Controls />
                   </ReactFlow>
                 </Box>
               </Flex>
