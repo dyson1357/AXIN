@@ -1,0 +1,99 @@
+11:const conversationHistory = [
+20:const sampleCharts = {
+28:const complexResponses = [
+246:const followUpResponses = {
+477:const additionalResponses = {
+546:const conversationSummary = {
+578:const agentTypes = {
+589:const selectResponse = (inputLower: string) => {
+618:    const allResponses = [...complexResponses, ...Object.values(followUpResponses), ...Object.values(additionalResponses)];
+626:  const [messages, setMessages] = useState<any[]>([]);
+627:  const [input, setInput] = useState('');
+628:  const [isTyping, setIsTyping] = useState(false);
+629:  const [currentTypingText, setCurrentTypingText] = useState('');
+630:  const [copiedMessageId, setCopiedMessageId] = useState<number | null>(null);
+631:  const [isFullScreen, setIsFullScreen] = useState(false);
+632:  const [showSidebar, setShowSidebar] = useState(true);
+633:  const [selectedConversation, setSelectedConversation] = useState<number | null>(null);
+634:  const [conversationTitle, setConversationTitle] = useState("새 대화");
+637:  const [showFactoryReport, setShowFactoryReport] = useState(false);
+638:  const [showMaintenanceReport, setShowMaintenanceReport] = useState(false);
+641:  const [isDarkMode, setIsDarkMode] = useState(false);
+642:  const [searchQuery, setSearchQuery] = useState('');
+643:  const [isSearching, setIsSearching] = useState(false);
+644:  const [showSummary, setShowSummary] = useState(false);
+647:  const handleFactoryReport = (show: boolean) => {
+655:  const handleMaintenanceReport = (show: boolean) => {
+664:  const suggestedQuestions = [
+671:  const messagesEndRef = useRef<HTMLDivElement>(null);
+672:  const textAreaRef = useRef<HTMLTextAreaElement>(null);
+673:  const router = useRouter();
+676:  const additionalStyles = `
+929:    const styleEl = document.createElement('style');
+950:      const conversation = conversationHistory.find(c => c.id === selectedConversation);
+955:        const sampleMessages = [
+983:    const handleEscKeyDown = (e: KeyboardEvent) => {
+993:  const handleSendMessage = () => {
+997:    const userMessage = {
+1007:    const userInput = input;
+1014:    const inputLower = userInput.toLowerCase();
+1070:      const processingSteps = [
+1086:      const processingInterval = setInterval(() => {
+1101:            // 글로벌 selectResponse 함수 사용
+1102:            const response = selectResponse(inputLower);
+1105:            const finalResponse = `## ${primaryAgentType}의 분석 결과\n\n${response}\n\n---\n*이 답변은 ${primaryAgentType}가 주도하여 ${supportAgentTypes.join(', ')}와 협업하여 작성되었습니다.*`;
+1114:              const typingInterval = setInterval(() => {
+1117:                  const remainingText = finalResponse.slice(charIndex);
+1118:                  const nextSpace = remainingText.indexOf(' ');
+1119:                  const nextNewline = remainingText.indexOf('\n');
+1134:                  const chunkToAdd = remainingText.slice(0, nextBreak + 1);
+1139:                  const isNewline = chunkToAdd.includes('\n');
+1140:                  const isPunctuation = chunkToAdd.includes('.') || chunkToAdd.includes('!') || chunkToAdd.includes('?');
+1163:                    const agentMessage = {
+1191:  const showProcessingSteps = (primaryAgentType: string, supportAgentTypes: string[], inputText: string) => {
+1193:    const processingSteps = [
+1203:    const processingInterval = setInterval(() => {
+1212:          startTypingResponse(primaryAgentType, supportAgentTypes, selectResponse(inputText));
+1218:  // 전역 selectResponse 함수 사용
+1221:  const startTypingResponse = (primaryAgentType: string, supportAgentTypes: string[], response: string) => {
+1223:    const finalResponse = `## ${primaryAgentType}의 분석 결과\n\n${response}\n\n---\n*이 답변은 ${primaryAgentType}가 주도하여 ${supportAgentTypes.join(', ')}와 협업하여 작성되었습니다.*`;
+1230:    const typingInterval = setInterval(() => {
+1233:        const remainingText = finalResponse.slice(charIndex);
+1234:        const nextSpace = remainingText.indexOf(' ');
+1235:        const nextNewline = remainingText.indexOf('\n');
+1250:        const chunkToAdd = remainingText.slice(0, nextBreak + 1);
+1257:        const isNewline = chunkToAdd.includes('\n');
+1258:        const isPunctuation = chunkToAdd.includes('.') || chunkToAdd.includes('!') || chunkToAdd.includes('?');
+1273:            const latestUserMessage = [...messages].reverse().find(m => m.role === 'user');
+1274:            const userText = latestUserMessage ? latestUserMessage.content : '';
+1282:          const agentMessage = {
+1304:  const handleActionButtonClick = (e: Event) => {
+1305:    const target = e.target as HTMLElement;
+1306:    const action = target.classList[1];
+1341:    const userActionMessage = {
+1352:    const currentAgentType = agentTypes.DATA_ANALYST;
+1358:    const actionTypingInterval = setInterval(() => {
+1369:          const actionResult = {
+1392:  const handleKeyDown = (e: React.KeyboardEvent) => {
+1399:  const copyToClipboard = (content: string, id: number) => {
+1406:  const handleSuggestedQuestion = (question: string) => {
+1413:      const userMessage = {
+1427:      const inputLower = question.toLowerCase();
+1473:        const processingSteps = [
+1487:        const processingInterval = setInterval(() => {
+1499:              // 글로벌 selectResponse 함수 사용하여 응답 선택
+1500:              const response = selectResponse(inputLower);
+1503:              const finalResponse = `## ${primaryAgentType}의 분석 결과\n\n${response}\n\n---\n*이 답변은 ${primaryAgentType}가 주도하여 ${supportAgentTypes.join(', ')}와 협업하여 작성되었습니다.*`;
+1511:                const typingInterval = setInterval(() => {
+1514:                    const remainingText = finalResponse.slice(charIndex);
+1515:                    const nextSpace = remainingText.indexOf(' ');
+1516:                    const nextNewline = remainingText.indexOf('\n');
+1531:                    const chunkToAdd = remainingText.slice(0, nextBreak + 1);
+1553:                      const agentMessage = {
+1581:  const handleToggleFullScreen = () => {
+1585:  const startNewConversation = () => {
+1596:  const handleSelectConversation = (id: number) => {
+1603:    const colors = getThemeColors(isDarkMode);
+1743:                  const link = document.createElement('a');
+1744:                  const content = messages.map(m => 
+1747:                  const file = new Blob([content], { type: 'text/plain' });
